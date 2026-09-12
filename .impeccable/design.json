@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-12T00:00:00Z",
+  "title": "Design System: Movie Tracker",
+  "extensions": {
+    "colorMeta": {
+      "ground": { "role": "neutral", "displayName": "Practical Ground", "canonical": "#f1f0ec", "tonalRamp": ["#201e1b", "#3a3733", "#544f49", "#6e6860", "#8a8378", "#b3ada2", "#d8d4cb", "#f1f0ec"] },
+      "ground-raised": { "role": "neutral", "displayName": "Raised Ground", "canonical": "#eae7df", "tonalRamp": ["#1c1a17", "#37342e", "#524d44", "#6d665a", "#8a8271", "#b1a999", "#d3ccbe", "#eae7df"] },
+      "ink": { "role": "neutral", "displayName": "Charcoal Ink", "canonical": "#201e1b", "tonalRamp": ["#0e0d0b", "#201e1b", "#35322c", "#4b473f", "#635d52", "#7c7568", "#a59d8d", "#c9c1af"] },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#6b6155", "tonalRamp": ["#211e1a", "#3a3530", "#544c43", "#6b6155", "#847968", "#a1957f", "#c3b6a0", "#e2d8c9"] },
+      "shelf-brown": { "role": "secondary", "displayName": "Particleboard Shelf Brown", "canonical": "#6b4a31", "tonalRamp": ["#20150e", "#3a271a", "#543826", "#6b4a31", "#875f42", "#a67d5f", "#c7a486", "#e5cfb7"] },
+      "shelf-brown-soft": { "role": "secondary", "displayName": "Soft Shelf Brown", "canonical": "#d8cfc2", "tonalRamp": ["#38312a", "#544a3e", "#736555", "#93826d", "#b3a28b", "#d8cfc2", "#e8e2d8", "#f5f2ec"] },
+      "accent": { "role": "primary", "displayName": "Shelf Green", "canonical": "#5cc13b", "tonalRamp": ["#122909", "#1c4212", "#255a1a", "#347b25", "#48a233", "#5cc13b", "#8bd670", "#c0ecab"] },
+      "accent-ink": { "role": "primary", "displayName": "Accent Ink", "canonical": "#16320f", "tonalRamp": ["#081a05", "#16320f", "#254a1c", "#356328", "#487e39", "#5f9c4d", "#82bd6e", "#b3dda0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Spine Display (Oswald)", "purpose": "Site title, movie titles on spine rows and preview, aisle/section headings. Condensed grotesque, always uppercase." },
+      "body": { "displayName": "Body (Inter)", "purpose": "Expanded note text only — the system's one piece of running prose." },
+      "label": { "displayName": "Stamped Label (JetBrains Mono)", "purpose": "Dates, counts, field labels, member byline, ticket tag — anything read as recorded data rather than editorial content." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "opacity-hover", "value": "opacity 0.15s ease (transition-opacity)", "purpose": "Primary button hover feedback (opacity to 90%)." },
+      { "name": "border-focus", "value": "border-color 0.15s ease (transition-colors)", "purpose": "Field border shift from soft-brown to full brown on focus." },
+      { "name": "chevron-expand", "value": "transform 0.2s (rotate 180deg)", "purpose": "Spine-row notes disclosure chevron." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Add to Shelf)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The add-movie form's submit action; the system's one saturated call-to-action.",
+      "html": "<button class=\"ds-btn-primary\" type=\"submit\">Add to Shelf</button>",
+      "css": ".ds-btn-primary { background: #5cc13b; color: #16320f; font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 20px; border: none; border-radius: 0; transition: opacity 0.15s ease; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:focus-visible { outline: 2px solid #6b4a31; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; }"
+    },
+    {
+      "name": "Ghost Button (Log out)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Masthead logout action, sits on the brown header band.",
+      "html": "<button class=\"ds-btn-ghost\" type=\"submit\">Log out</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #f1f0ec; border: 1px solid #d8cfc2; border-radius: 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 12px; transition: background-color 0.15s ease; } .ds-btn-ghost:hover { background: rgba(0,0,0,0.1); } .ds-btn-ghost:focus-visible { outline: 2px solid #6b4a31; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field (underline style)",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Add-movie form's title/notes fields — box-less, bottom-border-only, mono label above.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-title\">Title</label><input id=\"ds-title\" class=\"ds-field-input\" placeholder=\"e.g. The Matrix\" /></div>",
+      "css": ".ds-field-label { display: block; margin-bottom: 4px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b6155; } .ds-field-input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #d8cfc2; border-radius: 0; padding: 6px 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px; color: #201e1b; outline: none; transition: border-color 0.15s ease; } .ds-field-input:focus { border-bottom-color: #6b4a31; } .ds-field-input::placeholder { color: #6b6155; }"
+    },
+    {
+      "name": "Aisle (status group with spine rows)",
+      "kind": "custom",
+      "refersTo": "aisle-tab",
+      "description": "Signature component: a laminated green divider tab over a bordered panel of spine rows, each with a left+bottom case-edge rule and inline star rating.",
+      "html": "<section class=\"ds-aisle\"><div class=\"ds-aisle-tab\"><h3 class=\"ds-aisle-title\">Watching</h3><span class=\"ds-aisle-count\">2</span></div><div class=\"ds-aisle-panel\"><div class=\"ds-spine-row\"><span class=\"ds-spine-title\">Inception</span><span class=\"ds-spine-date\">Sep 12, 2026</span></div></div></section>",
+      "css": ".ds-aisle-tab { display: inline-flex; align-items: center; gap: 8px; background: #5cc13b; color: #16320f; border-radius: 2px 2px 0 0; padding: 6px 12px; } .ds-aisle-title { font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; } .ds-aisle-count { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; } .ds-aisle-panel { border: 1px solid #d8cfc2; border-radius: 0 2px 2px 2px; background: #eae7df; padding: 0 16px; } .ds-spine-row { display: flex; align-items: center; gap: 12px; padding: 12px 0 12px 12px; border-left: 1px solid #6b4a31; border-bottom: 1px solid #d8cfc2; } .ds-spine-title { font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 15px; text-transform: uppercase; color: #201e1b; flex: 1; } .ds-spine-date { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #6b6155; }"
+    },
+    {
+      "name": "Star Rating",
+      "kind": "custom",
+      "refersTo": "accent",
+      "description": "Inline five-star rating; filled stars use the reserved accent green, empty stars use soft ink outline. Inline SVG, no icon font.",
+      "html": "<span class=\"ds-stars\" aria-label=\"4 out of 5 stars\"><svg class=\"ds-star ds-star-filled\" viewBox=\"0 0 20 20\" width=\"14\" height=\"14\"><path d=\"M10 1.6l2.47 5.24 5.78.66-4.3 3.94 1.16 5.7L10 14.2l-5.11 2.94 1.16-5.7-4.3-3.94 5.78-.66L10 1.6z\"/></svg></span>",
+      "css": ".ds-stars { display: inline-flex; align-items: center; gap: 2px; } .ds-star-filled path { fill: #5cc13b; stroke: #5cc13b; stroke-width: 1.3; } .ds-star-empty path { fill: none; stroke: #6b6155; stroke-width: 1.3; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Video Rental Shelf",
+    "overview": "Movie Tracker's dashboard reads as the user's own home-video rental shelf: three status \"aisles\" (Want to Watch / Watching / Watched) laid out as laminated genre-divider tabs over rows of spine-labeled titles, lit like practical shelf light rather than a glossy SaaS dashboard or a poster-wall app. The system explicitly refuses two genre defaults: the generic card-grid dashboard and the Letterboxd-style poster wall. Structure is carried by a warm particleboard-brown frame and hairline rules, not by card shadows or rounded panels; the single reserved accent green is spent only where the world's own vocabulary calls for it — status tabs, the add action, and star ratings.\n\nDensity is practical and unadorned: flat surfaces, dashed-rule tickets for the add-form (\"label ticket\"), and thin left/bottom case-edge rules on each spine row so shelved rows read as discrete objects rather than table rows. Titles are set in a bold condensed grotesque to read like spine-print lettering; dates and counts run in a monospace to read like price-gun and return-stamp lettering. There is no photographic imagery, no icon-font iconography, and no drop shadow anywhere in the build — depth is conveyed entirely by flat tonal layering and brown structural framing.",
+    "keyCharacteristics": [
+      "Flat, shadow-free surfaces; structure carried by brown framing and hairline rules, not elevation",
+      "One reserved accent (green) spent only on status tabs, the primary action, and rating stars — never decorative",
+      "Condensed-caps display type for titles/labels, monospace for dates/counts/meta, regular sans for notes prose",
+      "Case-edge cues (thin left + bottom rule) on each spine row so rows read as separate shelved objects",
+      "Dashed-rule \"label ticket\" framing on the add-movie form, with a live spine-row preview before submit"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Green appears only on status tabs, the primary \"Add to Shelf\" action, filled rating stars, and text selection. It never becomes a background, a border, or a hover tint anywhere else in the system — its rarity is what makes it read as shelf signage rather than UI chrome.", "section": "colors" },
+      { "name": "The No-Shadow Rule", "body": "No box-shadow appears anywhere in the build. Depth and hierarchy are carried entirely by the ground/raised-ground tonal step and by brown structural borders.", "section": "colors" },
+      { "name": "The Stamped-Meta Rule", "body": "Anything that reads as a record of fact rather than editorial content — dates, counts, the member byline — is set in the monospace label face, uppercase, at 11px. Display type is reserved for names (titles, section labels); mono is reserved for data.", "section": "typography" },
+      { "name": "The Flat-Shelf Rule", "body": "No box-shadow is used at rest or on hover/focus anywhere in this system. Raised panels are signaled by the ground/raised-ground tonal shift plus a border, never by elevation.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do reserve accent green (#5cc13b) exclusively for aisle tabs, the primary add action, and filled rating stars.",
+      "Do keep all surfaces flat — use the ground/raised-ground tonal step and brown borders for hierarchy, never a shadow.",
+      "Do set titles and status labels in the condensed display face (Oswald, uppercase); set dates, counts, and byline text in the mono label face.",
+      "Do give each spine row a left+bottom case-edge rule so grouped rows read as discrete shelved objects, not table rows."
+    ],
+    "donts": [
+      "Don't introduce a second saturated color alongside the accent green — the palette holds one accent only.",
+      "Don't add box-shadow to any surface, at rest or on hover; this world conveys depth through tone and brown framing only.",
+      "Don't use the structural shelf-brown as a status/active-state color — it is reserved for framing (masthead, borders, focus ring), and status tabs must stay on the reserved accent so the two roles stay visually distinct.",
+      "Don't use photographic imagery, glyph icon sets, or icon fonts; the two icons in the system (search, chevron) are hand-authored inline SVG matching the line weight of the rest of the system."
+    ]
+  }
+}

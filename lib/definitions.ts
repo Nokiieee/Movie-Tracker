@@ -39,3 +39,54 @@ export type LoginFormState =
       message?: string;
     }
   | undefined;
+
+export const MOVIE_STATUSES = ["want_to_watch", "watching", "watched"] as const;
+
+export type MovieStatus = (typeof MOVIE_STATUSES)[number];
+
+export const MOVIE_STATUS_LABELS: Record<MovieStatus, string> = {
+  want_to_watch: "Want to Watch",
+  watching: "Watching",
+  watched: "Watched",
+};
+
+export const AddMovieFormSchema = z.object({
+  title: z
+    .string()
+    .min(1, { error: "Title is required." })
+    .max(200, { error: "Title must be less than 200 characters." })
+    .trim(),
+  status: z.enum(MOVIE_STATUSES, { error: "Please select a valid status." }),
+});
+
+export type AddMovieFormState =
+  | {
+      errors?: {
+        title?: string[];
+        status?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
+export const EditMovieFormSchema = z.object({
+  status: z.enum(MOVIE_STATUSES, { error: "Please select a valid status." }),
+});
+
+export type EditMovieFormState =
+  | {
+      errors?: {
+        status?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
+export type Movie = {
+  id: string;
+  title: string;
+  status: MovieStatus;
+  rating: number | null;
+  notes: string | null;
+  created_at: string;
+};
