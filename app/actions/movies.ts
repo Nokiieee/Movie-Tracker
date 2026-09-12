@@ -65,6 +65,32 @@ export async function addMovie(state: AddMovieFormState, formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+export async function deleteMovie(formData: FormData) {
+  const id = formData.get("id");
+
+  if (typeof id !== "string" || !id) {
+    return;
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  await supabase
+    .schema("movie_tracker")
+    .from("movies")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  revalidatePath("/dashboard");
+}
+
 export async function updateMovie(state: EditMovieFormState, formData: FormData) {
   const id = formData.get("id");
 

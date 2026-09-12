@@ -1,14 +1,40 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Movie, MOVIE_STATUSES, MOVIE_STATUS_LABELS, MovieStatus } from "@/lib/definitions";
+import { useFormStatus } from "react-dom";
+import { Pencil, Trash2 } from "lucide-react";
+import {
+  Movie,
+  MOVIE_STATUSES,
+  MOVIE_STATUS_LABELS,
+  MovieStatus,
+} from "@/lib/definitions";
 import { StarRating } from "@/components/movies/star-rating";
 import { EditMovieForm } from "@/components/movies/edit-movie-form";
+import { deleteMovie } from "@/app/actions/movies";
 
-const STATUS_STYLE: Record<MovieStatus, { bg: string; ink: string; tint: string; rotate: string }> = {
-  want_to_watch: { bg: "var(--rose)", ink: "var(--rose-ink)", tint: "var(--rose-tint)", rotate: "-rotate-1" },
-  watching: { bg: "var(--sage)", ink: "var(--sage-ink)", tint: "var(--sage-tint)", rotate: "rotate-1" },
-  watched: { bg: "var(--butter)", ink: "var(--butter-ink)", tint: "var(--butter-tint)", rotate: "-rotate-1" },
+const STATUS_STYLE: Record<
+  MovieStatus,
+  { bg: string; ink: string; tint: string; rotate: string }
+> = {
+  want_to_watch: {
+    bg: "var(--rose)",
+    ink: "var(--rose-ink)",
+    tint: "var(--rose-tint)",
+    rotate: "-rotate-1",
+  },
+  watching: {
+    bg: "var(--sage)",
+    ink: "var(--sage-ink)",
+    tint: "var(--sage-tint)",
+    rotate: "rotate-1",
+  },
+  watched: {
+    bg: "var(--butter)",
+    ink: "var(--butter-ink)",
+    tint: "var(--butter-tint)",
+    rotate: "-rotate-1",
+  },
 };
 
 function formatDate(iso: string) {
@@ -19,37 +45,80 @@ function formatDate(iso: string) {
   });
 }
 
+function DeleteSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="flex items-center gap-1.5 rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+    >
+      <Trash2 size={14} strokeWidth={2} aria-hidden="true" />
+      {pending ? "Deleting..." : "Delete"}
+    </button>
+  );
+}
+
 function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const hasNotes = Boolean(movie.notes);
 
   if (editing) {
     return (
       <li className="border-b border-[var(--tape-border)] last:border-b-0">
-        <EditMovieForm movie={movie} tint={tint} onCancel={() => setEditing(false)} />
+        <EditMovieForm
+          movie={movie}
+          tint={tint}
+          onCancel={() => setEditing(false)}
+        />
+      </li>
+    );
+  }
+
+  if (confirmingDelete) {
+    return (
+      <li className="border-b border-[var(--tape-border)] last:border-b-0">
+        <form
+          action={deleteMovie}
+          className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
+          style={{ backgroundColor: tint }}
+        >
+          <input type="hidden" name="id" value={movie.id} />
+          <p className="text-sm text-[var(--ink)]">
+            Delete <span className="font-medium">{movie.title}</span>? This
+            can&apos;t be undone.
+          </p>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(false)}
+              className="rounded-md border border-[var(--tape-border)] px-3 py-1.5 text-sm font-medium text-[var(--ink-soft)] transition-colors hover:bg-white"
+            >
+              Cancel
+            </button>
+            <DeleteSubmitButton />
+          </div>
+        </form>
       </li>
     );
   }
 
   return (
     <li className="border-b border-[var(--tape-border)] last:border-b-0">
-      <div className="flex w-full items-center gap-3 px-4 py-3">
+      <div className="flex flex-col sm:flex-row sm:items-stretch">
         <button
           type="button"
           onClick={() => hasNotes && setOpen((v) => !v)}
           aria-expanded={hasNotes ? open : undefined}
           disabled={!hasNotes}
-          className={`flex flex-1 items-center gap-3 text-left ${
+          className={`flex min-w-0 flex-1 items-center gap-2 px-4 pb-2 pt-3 text-left sm:py-3 ${
             hasNotes ? "cursor-pointer" : "cursor-default"
           }`}
         >
-          <span className="flex-1 truncate text-sm font-medium text-[var(--ink)]">
+          <span className="min-w-0 truncate text-sm font-medium text-[var(--ink)]">
             {movie.title}
-          </span>
-          <StarRating rating={movie.rating} />
-          <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
-            {formatDate(movie.created_at)}
           </span>
           <span className="flex w-3 shrink-0 items-center justify-center">
             {hasNotes && (
@@ -72,13 +141,32 @@ function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
             )}
           </span>
         </button>
-        <button
-          type="button"
-          onClick={() => setEditing(true)}
-          className="shrink-0 rounded-md border border-[var(--tape-border)] px-2 py-1 text-xs font-medium text-[var(--ink-soft)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--ink)]"
-        >
-          Edit
-        </button>
+        <div className="flex items-center justify-between gap-3 px-4 pb-3 pt-0 sm:justify-end sm:py-3 sm:pl-0 sm:shrink-0">
+          <div className="flex shrink-0 items-center gap-3">
+            <StarRating rating={movie.rating} />
+            <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
+              {formatDate(movie.created_at)}
+            </span>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setEditing(true)}
+              aria-label={`Edit ${movie.title}`}
+              className="flex shrink-0 items-center justify-center rounded-md border border-[var(--tape-border)] p-2 text-[var(--ink-soft)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--ink)]"
+            >
+              <Pencil size={18} strokeWidth={2} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(true)}
+              aria-label={`Delete ${movie.title}`}
+              className="flex shrink-0 items-center justify-center rounded-md border border-[var(--tape-border)] p-2 text-[var(--ink-soft)] transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+            >
+              <Trash2 size={18} strokeWidth={2} aria-hidden="true" />
+            </button>
+          </div>
+        </div>
       </div>
       {hasNotes && open && (
         <p
@@ -92,7 +180,13 @@ function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
   );
 }
 
-function StatusSection({ status, movies }: { status: MovieStatus; movies: Movie[] }) {
+function StatusSection({
+  status,
+  movies,
+}: {
+  status: MovieStatus;
+  movies: Movie[];
+}) {
   const style = STATUS_STYLE[status];
   return (
     <section className="relative pt-3">
@@ -149,9 +243,27 @@ export function MovieList({ movies }: { movies: Movie[] }) {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-2 rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-2">
-        <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" className="shrink-0 text-[var(--ink-soft)]">
-          <circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M13 13l4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <svg
+          viewBox="0 0 20 20"
+          width="14"
+          height="14"
+          aria-hidden="true"
+          className="shrink-0 text-[var(--ink-soft)]"
+        >
+          <circle
+            cx="8.5"
+            cy="8.5"
+            r="6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M13 13l4.5 4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </svg>
         <input
           type="text"
@@ -164,7 +276,11 @@ export function MovieList({ movies }: { movies: Movie[] }) {
 
       <div className="space-y-6">
         {MOVIE_STATUSES.map((status) => (
-          <StatusSection key={status} status={status} movies={byStatus[status]} />
+          <StatusSection
+            key={status}
+            status={status}
+            movies={byStatus[status]}
+          />
         ))}
       </div>
     </div>
