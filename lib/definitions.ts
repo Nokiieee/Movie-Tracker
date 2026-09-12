@@ -69,6 +69,19 @@ export type AddMovieFormState =
     }
   | undefined;
 
+export const EditMovieFormSchema = z.object({
+  status: z.enum(MOVIE_STATUSES, { error: "Please select a valid status." }),
+});
+
+export type EditMovieFormState =
+  | {
+      errors?: {
+        status?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
 export type Movie = {
   id: string;
   title: string;

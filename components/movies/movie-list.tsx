@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Movie, MOVIE_STATUSES, MOVIE_STATUS_LABELS, MovieStatus } from "@/lib/definitions";
 import { StarRating } from "@/components/movies/star-rating";
+import { EditMovieForm } from "@/components/movies/edit-movie-form";
 
 const STATUS_STYLE: Record<MovieStatus, { bg: string; ink: string; tint: string; rotate: string }> = {
   want_to_watch: { bg: "var(--rose)", ink: "var(--rose-ink)", tint: "var(--rose-tint)", rotate: "-rotate-1" },
@@ -20,46 +21,65 @@ function formatDate(iso: string) {
 
 function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
   const hasNotes = Boolean(movie.notes);
+
+  if (editing) {
+    return (
+      <li className="border-b border-[var(--tape-border)] last:border-b-0">
+        <EditMovieForm movie={movie} tint={tint} onCancel={() => setEditing(false)} />
+      </li>
+    );
+  }
 
   return (
     <li className="border-b border-[var(--tape-border)] last:border-b-0">
-      <button
-        type="button"
-        onClick={() => hasNotes && setOpen((v) => !v)}
-        aria-expanded={hasNotes ? open : undefined}
-        className={`flex w-full items-center gap-3 px-4 py-3 text-left ${
-          hasNotes ? "cursor-pointer hover:bg-[var(--paper)]" : "cursor-default"
-        }`}
-      >
-        <span className="flex-1 truncate text-sm font-medium text-[var(--ink)]">
-          {movie.title}
-        </span>
-        <StarRating rating={movie.rating} />
-        <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
-          {formatDate(movie.created_at)}
-        </span>
-        <span className="flex w-3 shrink-0 items-center justify-center">
-          {hasNotes && (
-            <svg
-              viewBox="0 0 20 20"
-              width="12"
-              height="12"
-              className={`text-[var(--ink-soft)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-              aria-hidden="true"
-            >
-              <path
-                d="M5 7.5l5 5 5-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </span>
-      </button>
+      <div className="flex w-full items-center gap-3 px-4 py-3">
+        <button
+          type="button"
+          onClick={() => hasNotes && setOpen((v) => !v)}
+          aria-expanded={hasNotes ? open : undefined}
+          disabled={!hasNotes}
+          className={`flex flex-1 items-center gap-3 text-left ${
+            hasNotes ? "cursor-pointer" : "cursor-default"
+          }`}
+        >
+          <span className="flex-1 truncate text-sm font-medium text-[var(--ink)]">
+            {movie.title}
+          </span>
+          <StarRating rating={movie.rating} />
+          <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
+            {formatDate(movie.created_at)}
+          </span>
+          <span className="flex w-3 shrink-0 items-center justify-center">
+            {hasNotes && (
+              <svg
+                viewBox="0 0 20 20"
+                width="12"
+                height="12"
+                className={`text-[var(--ink-soft)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 7.5l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setEditing(true)}
+          className="shrink-0 rounded-md border border-[var(--tape-border)] px-2 py-1 text-xs font-medium text-[var(--ink-soft)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--ink)]"
+        >
+          Edit
+        </button>
+      </div>
       {hasNotes && open && (
         <p
           className="max-w-[70ch] px-4 py-3 text-sm leading-relaxed text-[var(--ink-soft)]"
