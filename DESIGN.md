@@ -1,37 +1,37 @@
 ---
 name: Movie Tracker
-description: A private movie list rendered as your own home-video rental shelf — status aisles of spine-labeled titles under practical shelf light.
+description: The whole app as a kept movie-night diary — warm cream paper, washi-taped panels in rose/sage/butter/lilac, and hand-stamped ticket rows, from the landing gate through auth to the dashboard.
 colors:
-  ground: "#f1f0ec"
-  ground-raised: "#eae7df"
-  ink: "#201e1b"
-  ink-soft: "#6b6155"
-  shelf-brown: "#6b4a31"
-  shelf-brown-soft: "#d8cfc2"
-  accent: "#5cc13b"
-  accent-ink: "#16320f"
+  paper: "#fbf3e7"
+  paper-panel: "#fffcf6"
+  ink: "#3a342c"
+  ink-soft: "#6e6459"
+  tape-border: "#e3d5be"
+  rose: "#f4a6a0"
+  rose-ink: "#7a2e2a"
+  sage: "#9fc5a8"
+  sage-ink: "#2f4a38"
+  butter: "#f2cb6a"
+  butter-ink: "#6b4a17"
+  lilac: "#c9b6e4"
+  lilac-ink: "#4a3268"
+  star: "#facc15"
+  star-empty: "#ddd0b8"
 typography:
   display:
-    fontFamily: "Oswald, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Caveat, cursive"
+    fontSize: "30px"
     fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: "0.01em"
+    lineHeight: 1
   body:
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 400
-    lineHeight: 1.6
-    letterSpacing: "normal"
-  label:
-    fontFamily: "JetBrains Mono, ui-monospace, monospace"
-    fontSize: "11px"
-    fontWeight: 400
-    lineHeight: 1.4
-    letterSpacing: "0.08em"
+    lineHeight: 1.5
 rounded:
-  none: "0px"
   sm: "2px"
+  md: "6px"
+  lg: "8px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -39,141 +39,113 @@ spacing:
   lg: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.none}"
-    padding: "8px 20px"
-  button-primary-hover:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-ink}"
-  button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ground}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "6px 12px"
-  aisle-tab:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-ink}"
-    typography: "{typography.display}"
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper-panel}"
+    rounded: "{rounded.md}"
+    padding: "8px 16px"
+  status-tab:
     rounded: "{rounded.sm}"
-    padding: "6px 12px"
+    padding: "4px 12px"
+    rotate: "±1deg"
   input-field:
-    backgroundColor: "transparent"
+    backgroundColor: "#ffffff"
     textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "6px 0"
+    border: "{colors.tape-border}"
+    rounded: "{rounded.md}"
+    padding: "8px 12px"
 ---
 
 # Design System: Movie Tracker
 
 ## Overview
 
-**Creative North Star: "The Video Rental Shelf"**
+The whole app — landing gate (`/`), auth (`/login`, `/signup`, `/signup/check-email`), and the dashboard — is styled as a kept movie-night diary: warm cream paper, washi-tape flags, and panels that read as hand-stamped tickets rather than generic cards. The `.diary` token scope lives on `<body>` in `app/layout.tsx`, so every route shares one palette; no page opts out.
 
-Movie Tracker's dashboard reads as the user's own home-video rental shelf: three status "aisles" (Want to Watch / Watching / Watched) laid out as laminated genre-divider tabs over rows of spine-labeled titles, lit like practical shelf light rather than a glossy SaaS dashboard or a poster-wall app. The system explicitly refuses two genre defaults: the generic card-grid dashboard and the Letterboxd-style poster wall. Structure is carried by a warm particleboard-brown frame and hairline rules, not by card shadows or rounded panels; the single reserved accent green is spent only where the world's own vocabulary calls for it — status tabs, the add action, and star ratings.
-
-Density is practical and unadorned: flat surfaces, dashed-rule tickets for the add-form ("label ticket"), and thin left/bottom case-edge rules on each spine row so shelved rows read as discrete objects rather than table rows. Titles are set in a bold condensed grotesque to read like spine-print lettering; dates and counts run in a monospace to read like price-gun and return-stamp lettering. There is no photographic imagery, no icon-font iconography, and no drop shadow anywhere in the build — depth is conveyed entirely by flat tonal layering and brown structural framing.
+This is the second visual direction change on this project (Video Rental Shelf → plain/neutral → Watch Diary), and the Watch Diary world initially shipped dashboard-only before this pass extended it to every route at the user's request. It was chosen through Impeccable's decision-page flow: the roll turned a photo-lab "darkroom" catalog challenger into a competing build candidate, but the user picked the model's own top-ranked grounded candidate, "The Watch Diary," instead.
 
 **Key Characteristics:**
-- Flat, shadow-free surfaces; structure carried by brown framing and hairline rules, not elevation
-- One reserved accent (green) spent only on status tabs, the primary action, and rating stars — never decorative
-- Condensed-caps display type for titles/labels, monospace for dates/counts/meta, regular sans for notes prose
-- Case-edge cues (thin left + bottom rule) on each spine row so rows read as separate shelved objects
-- Dashed-rule "label ticket" framing on the add-movie form, with a live spine-row preview before submit
+- Warm cream paper ground (`#FBF3E7`), white-ish paper panels (`#FFFCF6`) for content
+- Three washi-tape accent colors carry real weight — they drive each status section's tab, never just a small icon: rose for Want to Watch, sage for Watching, butter for Watched
+- A "tape flag" (small rotated rounded tab, soft shadow) marks both the add-movie panel ("New Entry") and each status section — the signature recurring motif
+- Caveat (a real, self-hosted handwritten-style Google Font) carries the site title only; all data (titles, dates, notes, labels) stays in Inter for scanability
+- Star ratings render as small hand-stamped marks: gold fill, each star given a slight per-star tilt
+- Soft, blurred shadows (never hard-offset) simulate paper lifting off the page; no color is ever used as a colored left/right border
 
 ## Colors
 
-A practical, unsaturated ground with one reserved accent; the palette avoids warm-cream default territory on purpose.
-
-### Primary
-- **Shelf Green** (`#5cc13b`): the system's one reserved accent. Used only for aisle-tab backgrounds, the "Add to Shelf" primary button, filled rating stars, and text selection — never as decorative chrome, border, or background elsewhere.
+### Status accents (the "life" of the system)
+- **Rose** (`#F4A6A0` bg / `#7A2E2A` ink): Want to Watch section tab.
+- **Sage** (`#9FC5A8` bg / `#2F4A38` ink): Watching section tab.
+- **Butter** (`#F2CB6A` bg / `#6B4A17` ink): Watched section tab.
+- **Lilac** (`#C9B6E4` bg / `#4A3268` ink): the "you're filling out a form" flag color — the add-movie panel's "New entry" tab, the login panel's "Welcome back" tab, and the signup panel's "New member" tab. Deliberately distinct from the three status colors so it's never mistaken for a fourth status.
+- All four bg/ink pairs are verified ≥4.5:1 contrast for small text (4.8–5.8:1 measured).
 
 ### Neutral
-- **Practical Ground** (`#f1f0ec`): page background. Deliberately pale gray-off-white, not warm cream.
-- **Raised Ground** (`#eae7df`): panel background for the add-form ticket and each aisle's row container — one step up from the page ground, no shadow needed to read as raised.
-- **Charcoal Ink** (`#201e1b`): primary text color (titles, headings, body).
-- **Soft Ink** (`#6b6155`): secondary text — meta labels, dates, empty-state copy, unfilled star outlines.
-- **Shelf Brown** (`#6b4a31`): structural framing color — masthead background, aisle borders, focus outline, add-form dashed border, search-bar underline.
-- **Shelf Brown Soft** (`#d8cfc2`): quieter structural tone — field underlines, row dividers, aisle-panel borders, masthead byline text.
-- **Accent Ink** (`#16320f`): text-on-accent color, used on the green aisle tabs and the green primary button for AA contrast.
+- **Paper** (`#FBF3E7`): page background.
+- **Paper Panel** (`#FFFCF6`): card/panel background, one step lighter than the page.
+- **Ink** (`#3A342C`): primary text, and the primary button's fill.
+- **Ink Soft** (`#6E6459`): secondary text — dates, byline, placeholders, empty states. (Darkened from an earlier `#8B8175` draft, which measured under the 4.5:1 floor.)
+- **Tape Border** (`#E3D5BE`): all hairline borders (panels, inputs, dividers).
 
 ### Named Rules
-**The One Accent Rule.** Green appears only on status tabs, the primary "Add to Shelf" action, filled rating stars, and text selection. It never becomes a background, a border, or a hover tint anywhere else in the system — its rarity is what makes it read as shelf signage rather than UI chrome.
+**Tape Colors Drive Structure, Never Decorate.** Each status's color must appear on its section tab (background + ink), not merely as a small dot or icon — the color is doing real navigational work (which shelf is this?).
 
-**The No-Shadow Rule.** No `box-shadow` appears anywhere in the build. Depth and hierarchy are carried entirely by the ground/raised-ground tonal step and by brown structural borders.
+**No Colored Side-Borders.** A note's expanded background gets a very light wash of its section's color instead of a colored left border, per this project's craft floor (colored `border-left`/`border-right` on list items is a banned pattern here).
+
+**Soft Shadows Only.** Every shadow used (`0 2px 4px`, `0 2px 10px`, both with real blur and low opacity) simulates paper sitting above the page — never a flat, zero-blur block shadow.
 
 ## Typography
 
-**Display Font:** Oswald (condensed grotesque; with ui-sans-serif, system-ui, sans-serif fallback)
-**Body Font:** Inter (with ui-sans-serif, system-ui, sans-serif fallback)
-**Label/Mono Font:** JetBrains Mono (with ui-monospace, monospace fallback)
-
-**Character:** A condensed, bold-caps display face reading as spine-print/shop-sign lettering, paired with a workhorse monospace for anything stamped or counted (dates, member byline, ticket labels, aisle counts), and a plain sans for the one piece of running prose (notes).
+**Display Font:** Caveat (600/700, self-hosted via `next/font/google`) — used only for the "Movie Tracker" wordmark, repeated at the top of every page (landing, login, signup, check-email, dashboard header).
+**Body Font:** Inter — everything else: page headings ("Log in", "Create an account", "Check your email"), movie titles, form labels/inputs, dates, notes, status-tab labels, buttons.
 
 ### Hierarchy
-- **Display / Masthead** (700, 24px, uppercase, 0.02em tracking): the "Movie Tracker" site title in the header, set on the brown masthead band.
-- **Title** (600, 15px, uppercase, 0.01em tracking): movie titles on spine rows and in the add-form preview — the spine-print label itself.
-- **Headline / Section** (600, 13-14px, uppercase, 0.04-0.06em tracking): aisle-tab status labels ("Want to Watch"), "New Arrival" ticket heading.
-- **Body** (400, 14px, 1.6 line-height): expanded note text on a spine row, max 70ch measure.
-- **Label** (400, 11px, uppercase, 0.06-0.08em tracking, mono): field labels, dates, member byline, "Label Ticket" tag, aisle counts.
-
-### Named Rules
-**The Stamped-Meta Rule.** Anything that reads as a record of fact rather than editorial content — dates, counts, the member byline — is set in the monospace label face, uppercase, at 11px. Display type is reserved for names (titles, section labels); mono is reserved for data.
+- **Wordmark** (Caveat, 600, `text-3xl`–`text-5xl` depending on the page, slight `-rotate-1`): "Movie Tracker" — the one handwritten moment, repeated on every screen.
+- **Page heading** (Inter, 600, `text-xl`–`text-2xl`): "Log in", "Create an account", "Check your email" — functional, not personality.
+- **Movie title** (Inter, 500, `text-sm`): kept plain and scannable — this is data, not personality.
+- **Status tab label** (Inter, 600, `text-xs`, uppercase, tracked): e.g. "WATCHING · 2".
+- **Meta / dates / byline** (Inter, 400, `text-sm`, `--ink-soft`).
 
 ## Layout
 
-Single-column, max-width content column (`max-w-3xl`, ~768px) centered on the page, with a full-bleed brown masthead band above it. The dashboard stacks vertically: masthead → add-movie ticket → search rule → three aisle sections in fixed status order (Want to Watch, Watching, Watched). Each aisle is full-width within the content column; there is no side-by-side card grid. The add-form uses a responsive 3-column grid (`2fr 1fr 1fr` for title/shelf/rating) that collapses to a single column below `sm`. Spacing runs on an 8px-family rhythm (gap-2/gap-4 between fields, space-y-5/space-y-6 between aisles, p-5/p-6 panel padding).
+Unchanged from the prior system: single-column `max-w-3xl` content column. Dashboard stacks: paper header → add-movie diary-entry panel → search field → three washi-taped status sections in fixed order (Want to Watch, Watching, Watched).
 
 ## Elevation & Depth
 
-Flat by design — no shadows anywhere in the build. Depth is conveyed by two devices only: a tonal step between `--ground` (page) and `--ground-raised` (panels), and brown structural framing (solid or dashed borders) that stands in for a shelf's physical edges. The masthead is a solid brown band rather than a shadowed header bar.
-
-### Named Rules
-**The Flat-Shelf Rule.** No `box-shadow` is used at rest or on hover/focus anywhere in this system. Raised panels are signaled by the ground/raised-ground tonal shift plus a border, never by elevation.
+Soft, blurred shadows only (see Named Rules above) — this replaces the previous system's "no shadow at all" rule, since a paper/diary world reads as flat without a little lift.
 
 ## Shapes
 
-Square corners throughout (`border-radius: 0`) with one narrow exception: aisle-tab and aisle-panel corners use a 2px radius (`rounded-t-sm` / `rounded-b-sm` / `rounded-tr-sm`) to read as a laminated divider tab overlapping its panel. Borders are the primary form device: a dashed brown border frames the add-movie "label ticket," solid hairline rules divide spine rows and the search bar, and a paired left+bottom rule (brown left edge, soft-brown bottom edge) gives each spine row a subtle case-edge cue so individual rows read as separate shelved objects rather than plain table rows.
+`rounded-md` on inputs and buttons, `rounded-lg` on panels, `rounded-sm` on the small rotated tape-flag tabs. Every tape flag carries a slight rotation (`-1deg`/`1deg`) — never perfectly square to the grid — to read as a hand-applied piece of tape.
 
 ## Components
 
 ### Buttons
-- **Shape:** square corners (`border-radius: 0`)
-- **Primary ("Add to Shelf"):** accent-green background (`#5cc13b`), accent-ink text (`#16320f`), display font, uppercase, `px-5 py-2`; the system's one saturated call-to-action
-- **Hover / Focus:** primary uses opacity reduction on hover (`hover:opacity-90`); focus-visible uses a 2px shelf-brown outline with 2px offset system-wide
-- **Ghost (Log out):** transparent background, shelf-brown-soft border, ground-colored text on the brown masthead; hover fills `bg-black/10`
+- **Primary ("Add movie"):** `bg-[--ink]` (dark brown), `text-[--paper-panel]` (near-white), `rounded-md`; on hover rotates `-1deg` — a small "stamping down" gesture.
+- **Ghost (Log out):** `--paper-panel` background, `--tape-border` border, `--ink` text.
 
-### Cards / Containers
-- **Corner Style:** square, except aisle tab/panel (2px radius)
-- **Background:** `--ground-raised` for the add-form ticket and each aisle's row panel
-- **Shadow Strategy:** none — see Elevation & Depth
-- **Border:** dashed shelf-brown border on the add-form ticket; solid shelf-brown-soft border on aisle panels
-- **Internal Padding:** `p-5` (form ticket), `px-4` (aisle panel)
+### Tape Flag (signature motif)
+A small `rounded-sm` tab, rotated ±1–2°, with a soft shadow, positioned to overlap the top-left of the panel it labels. Used on every standalone form panel (add-movie's "New entry", login's "Welcome back", signup's "New member" — all lilac) and on every status section (status label + count, in that status's color).
+
+### Status Section
+Tape flag (see above) + a `rounded-lg` paper-panel list of ticket rows. Rows with notes expand inline; the expanded note area gets a light tint of the section's color as its background (never a colored border).
+
+### Star Rating
+Gold-filled stamp-style stars (`#FACC15` fill, `#E8A93D` stroke), each at a slight independent tilt; unfilled stars use a warm tan outline (`#DDD0B8`, not cool gray). The rating slot always reserves a fixed width so dates align in a column regardless of rating.
 
 ### Inputs / Fields
-- **Style:** no box — bottom-border-only fields (`border-b-2`, shelf-brown-soft), transparent background, mono label type above each field
-- **Focus:** border color shifts to full shelf-brown on focus
-- **Error / Disabled:** field errors render as red-700 text below the field; submit button dims to 50% opacity when disabled/pending
-
-### Navigation
-- **Style:** single masthead band (shelf-brown background) holding the site title (display, uppercase, ground-colored) and a bordered ghost logout button; a mono member byline sits below in shelf-brown-soft. No nav menu or tabs beyond the aisle structure itself.
-
-### Aisle / Spine Row (signature component)
-The dashboard's defining pattern. Each status group renders as an "aisle": a green laminated divider tab (status label + mono count) sitting atop a bordered, raised-ground panel of "spine rows." Each row is a single line — condensed-caps title, inline green star rating, mono date — with a left+bottom case-edge rule separating it from its neighbors. Rows with notes are interactive: clicking expands the row to reveal note text below, mimicking flipping a video case to its back cover; a small chevron rotates 180° to indicate state. Rows without notes are inert (no pointer affordance).
+`border-[--tape-border]`, white background, `rounded-md`, `px-3 py-2`; focus border shifts to `--ink`.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** reserve accent green (`#5cc13b`) exclusively for aisle tabs, the primary add action, and filled rating stars.
-- **Do** keep all surfaces flat — use the ground/raised-ground tonal step and brown borders for hierarchy, never a shadow.
-- **Do** set titles and status labels in the condensed display face (Oswald, uppercase); set dates, counts, and byline text in the mono label face.
-- **Do** give each spine row a left+bottom case-edge rule so grouped rows read as discrete shelved objects, not table rows.
+- **Do** keep Caveat scoped to the "Movie Tracker" wordmark only — never a page heading, status label, button, or piece of data.
+- **Do** repeat the wordmark at the top of every page — it's the thread that ties the landing gate, auth, and dashboard together.
+- **Do** give every status its color on the tab itself, not a subtle accent.
+- **Do** keep all shadows soft (offset + blur), never a flat block shadow.
+- **Do** use lilac for any new standalone form's flag — it means "you're filling something out," not tied to one specific page.
 
 ### Don't:
-- **Don't** introduce a second saturated color alongside the accent green — the palette holds one accent only.
-- **Don't** add box-shadow to any surface, at rest or on hover; this world conveys depth through tone and brown framing only.
-- **Don't** use the structural shelf-brown as a status/active-state color — it is reserved for framing (masthead, borders, focus ring), and status tabs must stay on the reserved accent so the two roles stay visually distinct.
-- **Don't** use photographic imagery, glyph icon sets, or icon fonts; the two icons in the system (search, chevron) are hand-authored inline SVG matching the line weight of the rest of the system.
+- **Don't** add a colored left/right border to a row, card, or callout — use a background tint instead.
+- **Don't** use rose/sage/butter outside the movie-list status sections; they mean a specific status and nothing else.
+- **Don't** set movie titles, dates, page headings, or notes in Caveat — data and headings stay in Inter for scanability.

@@ -4,6 +4,12 @@ import { useMemo, useState } from "react";
 import { Movie, MOVIE_STATUSES, MOVIE_STATUS_LABELS, MovieStatus } from "@/lib/definitions";
 import { StarRating } from "@/components/movies/star-rating";
 
+const STATUS_STYLE: Record<MovieStatus, { bg: string; ink: string; tint: string; rotate: string }> = {
+  want_to_watch: { bg: "var(--rose)", ink: "var(--rose-ink)", tint: "var(--rose-tint)", rotate: "-rotate-1" },
+  watching: { bg: "var(--sage)", ink: "var(--sage-ink)", tint: "var(--sage-tint)", rotate: "rotate-1" },
+  watched: { bg: "var(--butter)", ink: "var(--butter-ink)", tint: "var(--butter-tint)", rotate: "-rotate-1" },
+};
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",
@@ -12,50 +18,53 @@ function formatDate(iso: string) {
   });
 }
 
-function SpineRow({ movie }: { movie: Movie }) {
+function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
   const [open, setOpen] = useState(false);
   const hasNotes = Boolean(movie.notes);
 
   return (
-    <li className="border-b border-l border-b-[var(--shelf-brown-soft)] border-l-[var(--shelf-brown)] last:border-b-0">
+    <li className="border-b border-[var(--tape-border)] last:border-b-0">
       <button
         type="button"
         onClick={() => hasNotes && setOpen((v) => !v)}
         aria-expanded={hasNotes ? open : undefined}
-        className={`flex w-full items-center gap-3 py-3 pl-3 text-left ${
-          hasNotes ? "cursor-pointer" : "cursor-default"
+        className={`flex w-full items-center gap-3 px-4 py-3 text-left ${
+          hasNotes ? "cursor-pointer hover:bg-[var(--paper)]" : "cursor-default"
         }`}
       >
-        <span
-          className="font-[family-name:var(--font-display)] text-[15px] font-semibold uppercase tracking-[0.01em] text-[var(--ink)] truncate flex-1"
-        >
+        <span className="flex-1 truncate text-sm font-medium text-[var(--ink)]">
           {movie.title}
         </span>
         <StarRating rating={movie.rating} />
-        <span className="font-[family-name:var(--font-data)] text-[11px] text-[var(--ink-soft)] shrink-0 tabular-nums">
+        <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
           {formatDate(movie.created_at)}
         </span>
-        {hasNotes && (
-          <svg
-            viewBox="0 0 20 20"
-            width="12"
-            height="12"
-            className={`shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-            aria-hidden="true"
-          >
-            <path
-              d="M5 7.5l5 5 5-5"
-              fill="none"
-              stroke="var(--ink-soft)"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
+        <span className="flex w-3 shrink-0 items-center justify-center">
+          {hasNotes && (
+            <svg
+              viewBox="0 0 20 20"
+              width="12"
+              height="12"
+              className={`text-[var(--ink-soft)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+              aria-hidden="true"
+            >
+              <path
+                d="M5 7.5l5 5 5-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </span>
       </button>
       {hasNotes && open && (
-        <p className="max-w-[70ch] pb-4 pl-3 text-sm leading-relaxed text-[var(--ink-soft)]">
+        <p
+          className="max-w-[70ch] px-4 py-3 text-sm leading-relaxed text-[var(--ink-soft)]"
+          style={{ backgroundColor: tint }}
+        >
           {movie.notes}
         </p>
       )}
@@ -63,26 +72,25 @@ function SpineRow({ movie }: { movie: Movie }) {
   );
 }
 
-function Aisle({ status, movies }: { status: MovieStatus; movies: Movie[] }) {
+function StatusSection({ status, movies }: { status: MovieStatus; movies: Movie[] }) {
+  const style = STATUS_STYLE[status];
   return (
-    <section>
-      <div className="inline-flex items-center gap-2 rounded-t-sm bg-[var(--accent)] px-3 py-1.5">
-        <h3 className="font-[family-name:var(--font-display)] text-[13px] font-semibold uppercase tracking-[0.04em] text-[var(--accent-ink)]">
-          {MOVIE_STATUS_LABELS[status]}
-        </h3>
-        <span className="font-[family-name:var(--font-data)] text-[11px] font-normal text-[var(--accent-ink)]">
-          {movies.length}
-        </span>
-      </div>
-      <div className="rounded-b-sm rounded-tr-sm border border-[var(--shelf-brown-soft)] bg-[var(--ground-raised)] px-4">
+    <section className="relative pt-3">
+      <span
+        className={`absolute left-3 top-0 ${style.rotate} rounded-sm px-3 py-1 text-xs font-semibold uppercase tracking-wide shadow-[0_2px_4px_rgba(58,52,44,0.15)]`}
+        style={{ backgroundColor: style.bg, color: style.ink }}
+      >
+        {MOVIE_STATUS_LABELS[status]} · {movies.length}
+      </span>
+      <div className="rounded-lg border border-[var(--tape-border)] bg-[var(--paper-panel)] pt-4 shadow-[0_2px_10px_rgba(58,52,44,0.06)]">
         {movies.length === 0 ? (
-          <p className="py-4 text-sm italic text-[var(--ink-soft)]">
-            This shelf is empty.
+          <p className="px-4 py-4 text-sm text-[var(--ink-soft)]">
+            No movies here yet.
           </p>
         ) : (
           <ul>
             {movies.map((movie) => (
-              <SpineRow key={movie.id} movie={movie} />
+              <MovieRow key={movie.id} movie={movie} tint={style.tint} />
             ))}
           </ul>
         )}
@@ -112,15 +120,15 @@ export function MovieList({ movies }: { movies: Movie[] }) {
 
   if (movies.length === 0) {
     return (
-      <p className="text-sm italic text-[var(--ink-soft)]">
-        Your shelf is empty — add your first movie above.
+      <p className="text-sm text-[var(--ink-soft)]">
+        Your list is empty — add your first movie above.
       </p>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 border-b border-[var(--shelf-brown)] pb-2">
+    <div className="space-y-8">
+      <div className="flex items-center gap-2 rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-2">
         <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" className="shrink-0 text-[var(--ink-soft)]">
           <circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
           <path d="M13 13l4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -129,14 +137,14 @@ export function MovieList({ movies }: { movies: Movie[] }) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search the shelf..."
-          className="w-full bg-transparent font-[family-name:var(--font-data)] text-sm text-[var(--ink)] placeholder:text-[var(--ink-soft)] outline-none"
+          placeholder="Search your movies..."
+          className="w-full bg-transparent text-sm text-[var(--ink)] placeholder:text-[var(--ink-soft)] outline-none"
         />
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         {MOVIE_STATUSES.map((status) => (
-          <Aisle key={status} status={status} movies={byStatus[status]} />
+          <StatusSection key={status} status={status} movies={byStatus[status]} />
         ))}
       </div>
     </div>

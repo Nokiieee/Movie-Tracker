@@ -34,7 +34,7 @@ Intentionally a minimal, no-frills tracker — there is no differentiating mecha
 
 ## Brand Commitments
 
-None yet. The project still carries `create-next-app` defaults (page `<title>`, description, default Geist fonts, no logo/name treatment) — all open for future visual work.
+The whole app — landing gate, auth, and dashboard — is styled as a warm, colorful "movie-night diary": cream paper, washi-tape flags (rose/sage/butter for movie statuses, lilac for any form), a repeated handwritten "Movie Tracker" wordmark, and hand-stamped star ratings. Chosen deliberately for more color and personality after an earlier plain iteration felt too sparse, then extended from the dashboard to every page for a consistent identity. See DESIGN.md.
 
 ## Evidence on Hand
 

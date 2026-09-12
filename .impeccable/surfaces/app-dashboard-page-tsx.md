@@ -2,7 +2,7 @@
 version: 1
 slug: "app-dashboard-page-tsx"
 primary_target: "app/dashboard/page.tsx"
-related_targets: ["components/movies/add-movie-form.tsx","components/movies/movie-list.tsx"]
+related_targets: ["components/movies/add-movie-form.tsx","components/movies/movie-list.tsx","app/page.tsx","app/login/login-form.tsx","app/signup/page.tsx","app/signup/check-email/page.tsx"]
 ---
 
 ## Scope
@@ -11,29 +11,29 @@ Route: `/dashboard` (app/dashboard/page.tsx, components/movies/add-movie-form.ts
 
 Audience / job: any signed-in user maintaining their own private want-to-watch/watching/watched list; the job is "see where things stand, add a new title fast, revisit notes/rating."
 
-Content: one real entry (Inception — watching, 4 stars, "mind-bending but worth it") plus a small set of clearly-synthetic placeholder movies filling Want to Watch and Watched, per the user's own choice.
+Content: real movies the user is tracking, plus any synthetic placeholders the user chooses for demo purposes.
 
-Constraints: preserve the existing data model, fields, statuses, and server actions (`app/actions/movies.ts`, `lib/definitions.ts`) exactly; preserve auth-gated redirect behavior; grouped-by-status layout (user-confirmed); design with room to scale (search/sort-ready) rather than assuming a tiny fixed list.
+Constraints: preserve the existing data model, fields, statuses, and server actions (`app/actions/movies.ts`, `lib/definitions.ts`) exactly; preserve auth-gated redirect behavior; grouped-by-status layout (user-confirmed, twice now). The Watch Diary world (tokens on `.diary`, applied at `<body>`) now covers the whole app — landing gate, auth, and dashboard — at the user's explicit request; it is no longer dashboard-only.
 
 ## Direction contract
 
-THESIS: The dashboard as your own rental-store shelf — three aisles (Want to Watch / Watching / Watched) of spine-labeled entries under practical shelf light, refusing both the generic SaaS card-dashboard default and the Letterboxd poster-wall default.
+THESIS: The dashboard as a kept movie-night diary — a warm paper page you actually flip through — refusing both the sterile SaaS card-dashboard default and the "video rental shelf" world this project already tried and retired.
 
-OWN-WORLD: Practical off-white/pale-gray ground (#F1F0EC, not warm cream), charcoal ink (#201E1B), warm particleboard-shelf brown (#6B4A31) as structural aisle framing, one reserved genre-card green (#5CC13B) for status tabs, active states, and rating stars only. Titles set in a bold condensed grotesque (spine-print lettering); dates/meta set in a workhorse monospace (price-gun/return-stamp lettering). Hairline shelf-edge rules, no card shadows. Raises: STAGED PREVIEW (donor: darkroom safelight challenger) — the add-movie form shows a live label preview of the exact spine row before it commits. EXPAND-IN-PLACE (donor: sneaker archive wall challenger) — notes stay collapsed on the spine row, revealed on interaction like flipping a video case. RESTRAINT (donor: iridescent cloud-edge challenger) — the single accent appears only on status tabs/active states/stars, never as decorative chrome.
+OWN-WORLD: Warm cream paper ground (`#FBF3E7`), soft charcoal-brown ink (`#3A342C`), three washi-tape accent colors carrying real weight (section headers, tabs, and empty states, never just a small icon): dusty rose (`#F4A6A0`) for Want to Watch, sage green (`#9FC5A8`) for Watching, warm butter-yellow (`#F2CB6A`) for Watched, plus lilac (`#C9B6E4`) reserved for any standalone form's flag (add-movie, login, signup). Titles set in a warm, slightly characterful display face (Caveat, self-hosted); rows read as hand-stamped tickets. Rating stars render as a rubber-stamp star mark, gold/yellow as already committed. Notes appear as a margin annotation tinted to its section's washi color. No box-shadow; depth comes from paper-vs-washi-tape layering — a washi "tape flag" overlaps each section's top edge, panels carry a soft paper-grain feel via texture/noise, not gradients.
 
-STORY: The visitor understands this is their own curated shelf; sees three aisles at a glance, pulls a title open to read its notes, adds a new arrival via a label-gun-style form that previews before it "prints."
+STORY: The visitor understands this is their own kept diary of movies, not a database table. They see three taped-off pages at a glance, flip open a stamped ticket to read its margin note, and add a new arrival by filling out a ticket that stamps into place. That same diary identity now greets them from the very first screen (the landing gate) and carries through signing up and logging in, so the dashboard never feels like a different product.
 
-FIRST VIEWPORT: A shop-sign masthead (site name hand-lettered, user's identity as a small member-card byline) with logout; below it, the add-movie form styled as a label-gun ticket with a live spine-row preview and a prominent green "Add to Shelf" action; below that, three full-width aisle sections stacked vertically, each headed by a laminated genre-divider tab (the status label) with its spine rows beneath — title in condensed caps, rating as green stars inline, notes collapsed, added-date in mono.
+FIRST VIEWPORT: A plain paper-toned header (site title in the display face, the user's name as a small pencilled byline) with a logout link; below it, the add-movie panel styled as a fresh diary entry with a live ticket preview and a warm "Add movie" stamp-styled button; below that, three washi-taped sections stacked vertically in fixed order (Want to Watch / Watching / Watched), each fully in its own accent color, listing hand-stamped ticket rows — title, rubber-stamp star rating, and date — with notes tucked as an expandable margin note.
 
-FORM: Video Rental Shelf / VHS-Blu-ray spine wall — candidate 5 of this surface's resonance-ordered direction list; seed key aa3b392c; user-approved on the decision page (optionId "assigned", code-led).
+FORM: Movie-Night Watch Diary — the user's own top-ranked grounded candidate for this round (IMPECCABLE'S PICK), chosen over the catalog-derived "Proofing Bench" assignment; seed key 4c63be39; user-approved on the decision page (optionId "model-pick", code-led). Extended app-wide (landing, login, signup, check-email) in a follow-up pass as a direct application of the same tokens and motifs — no new direction round, since the visual system was already committed.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
 
 ## Memorable moment
 
-Pulling a movie's row open to read its notes like flipping a video case to the back cover; adding a title as loading a label-gun ticket that previews before it commits to the shelf.
+Flipping open a stamped ticket to read its margin note, like turning to today's entry in a kept diary; adding a movie as filling out a fresh ticket that stamps into place on submit; the same handwritten "Movie Tracker" wordmark greeting you from the landing gate through login/signup to the dashboard.
 
 ## Unresolved decisions
 
-- Exact interaction for moving a movie between aisles (status change) is left to implementation — no drag-and-drop required for v1, an inline control is sufficient as long as it stays inside this world's vocabulary.
-- Search/sort controls are scoped for future work (this brief only commits to leaving room; no search UI is required in this build unless it fits cleanly).
+- Exact interaction for moving a movie between statuses is left to implementation — no drag-and-drop required, an inline control is sufficient as long as it stays inside this world's vocabulary.
+- Search/sort controls stay scoped for future work; this build only commits to leaving room.
