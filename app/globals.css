@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-neutral-500);
+  outline-offset: 2px;
+}
+
+/* Watch Diary world — applied on <body>, covers the whole app */
+.diary {
+  --paper: #fbf3e7;
+  --paper-panel: #fffcf6;
+  --ink: #3a342c;
+  --ink-soft: #6e6459;
+  --tape-border: #e3d5be;
+  --rose: #f4a6a0;
+  --rose-ink: #7a2e2a;
+  --sage: #9fc5a8;
+  --sage-ink: #2f4a38;
+  --butter: #f2cb6a;
+  --butter-ink: #6b4a17;
+  --lilac: #c9b6e4;
+  --lilac-ink: #4a3268;
+  --star: #facc15;
+  --star-empty: #ddd0b8;
+  --rose-tint: #fef2ec;
+  --sage-tint: #f3f5ed;
+  --butter-tint: #fdf6e5;
+
+  background-color: var(--paper);
+  color: var(--ink);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.23  0 0 0 0 0.2  0 0 0 0 0.17  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.diary :focus-visible {
+  outline-color: var(--ink);
+}
+
+.diary ::selection {
+  background: var(--rose);
+  color: var(--rose-ink);
+}
+
+.diary * {
+  scrollbar-color: var(--tape-border) var(--paper);
 }
