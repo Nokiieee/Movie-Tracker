@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Video Rental Shelf — practical shelf light, never warm cream */
+  --ground: #f1f0ec;
+  --ground-raised: #eae7df;
+  --ink: #201e1b;
+  --ink-soft: #6b6155;
+  --shelf-brown: #6b4a31;
+  --shelf-brown-soft: #d8cfc2;
+  --accent: #5cc13b;
+  --accent-ink: #16320f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ground: var(--ground);
+  --color-ground-raised: var(--ground-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-shelf-brown: var(--shelf-brown);
+  --color-shelf-brown-soft: var(--shelf-brown-soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-data);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--shelf-brown);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-color: var(--shelf-brown-soft) var(--ground);
 }
