@@ -25,25 +25,23 @@ export default async function DashboardPage() {
   const name = user.user_metadata?.full_name ?? user.email;
 
   return (
-    <div className="flex min-h-full flex-1 flex-col bg-[var(--ground)]">
-      <header className="bg-[var(--shelf-brown)]">
+    <div className="flex min-h-full flex-1 flex-col">
+      <header className="border-b border-[var(--tape-border)]">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-6 py-5">
-          <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold uppercase tracking-[0.02em] text-[var(--ground)]">
-            Movie Tracker
-          </h1>
+          <div>
+            <h1 className="font-[family-name:var(--font-hand)] text-3xl font-semibold leading-none text-[var(--ink)] -rotate-1">
+              Movie Tracker
+            </h1>
+            <p className="mt-1 text-sm italic text-[var(--ink-soft)]">{name}</p>
+          </div>
           <form action={logout}>
             <button
               type="submit"
-              className="border border-[var(--shelf-brown-soft)] px-3 py-1.5 font-[family-name:var(--font-data)] text-xs uppercase tracking-[0.06em] text-[var(--ground)] transition-colors hover:bg-black/10"
+              className="rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-1.5 text-sm font-medium text-[var(--ink)] transition-colors hover:bg-[var(--paper)]"
             >
               Log out
             </button>
           </form>
-        </div>
-        <div className="mx-auto w-full max-w-3xl px-6 pb-4">
-          <p className="font-[family-name:var(--font-data)] text-[11px] uppercase tracking-[0.08em] text-[var(--shelf-brown-soft)]">
-            Member · {name}
-          </p>
         </div>
       </header>
 

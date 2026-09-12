@@ -1,47 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  /* Video Rental Shelf — practical shelf light, never warm cream */
-  --ground: #f1f0ec;
-  --ground-raised: #eae7df;
-  --ink: #201e1b;
-  --ink-soft: #6b6155;
-  --shelf-brown: #6b4a31;
-  --shelf-brown-soft: #d8cfc2;
-  --accent: #5cc13b;
-  --accent-ink: #16320f;
-}
-
-@theme inline {
-  --color-ground: var(--ground);
-  --color-ground-raised: var(--ground-raised);
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
-  --color-shelf-brown: var(--shelf-brown);
-  --color-shelf-brown-soft: var(--shelf-brown-soft);
-  --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
-  --font-display: var(--font-display);
-  --font-sans: var(--font-body);
-  --font-mono: var(--font-data);
-}
-
 body {
-  background: var(--ground);
-  color: var(--ink);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 :focus-visible {
-  outline: 2px solid var(--shelf-brown);
+  outline: 2px solid var(--color-neutral-500);
   outline-offset: 2px;
 }
 
-* {
-  scrollbar-color: var(--shelf-brown-soft) var(--ground);
+/* Watch Diary world — applied on <body>, covers the whole app */
+.diary {
+  --paper: #fbf3e7;
+  --paper-panel: #fffcf6;
+  --ink: #3a342c;
+  --ink-soft: #6e6459;
+  --tape-border: #e3d5be;
+  --rose: #f4a6a0;
+  --rose-ink: #7a2e2a;
+  --sage: #9fc5a8;
+  --sage-ink: #2f4a38;
+  --butter: #f2cb6a;
+  --butter-ink: #6b4a17;
+  --lilac: #c9b6e4;
+  --lilac-ink: #4a3268;
+  --star: #facc15;
+  --star-empty: #ddd0b8;
+  --rose-tint: #fef2ec;
+  --sage-tint: #f3f5ed;
+  --butter-tint: #fdf6e5;
+
+  background-color: var(--paper);
+  color: var(--ink);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.23  0 0 0 0 0.2  0 0 0 0 0.17  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.diary :focus-visible {
+  outline-color: var(--ink);
+}
+
+.diary ::selection {
+  background: var(--rose);
+  color: var(--rose-ink);
+}
+
+.diary * {
+  scrollbar-color: var(--tape-border) var(--paper);
 }
