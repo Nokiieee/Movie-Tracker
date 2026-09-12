@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/actions/auth";
@@ -6,23 +7,26 @@ import { MovieList } from "@/components/movies/movie-list";
 import { Movie } from "@/lib/definitions";
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // The middleware already verified the session for this request and
+  // handed the result down via headers, so there's no need to call
+  // supabase.auth.getUser() a second time here.
+  const requestHeaders = await headers();
+  const userId = requestHeaders.get("x-user-id");
 
-  if (!user) {
+  if (!userId) {
     redirect("/login");
   }
 
+  const supabase = await createClient();
   const { data: movies, error } = await supabase
     .schema("movie_tracker")
     .from("movies")
     .select("id, title, status, rating, notes, created_at")
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  const name = user.user_metadata?.full_name ?? user.email;
+  const decodedName = decodeURIComponent(requestHeaders.get("x-user-name") ?? "");
+  const name = decodedName || requestHeaders.get("x-user-email") || "";
 
   return (
     <div className="flex min-h-full flex-1 flex-col">
