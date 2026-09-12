@@ -5,7 +5,10 @@ const protectedRoutes = ["/dashboard"];
 const authRoutes = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  const requestHeaders = new Headers(request.headers);
+  let supabaseResponse = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,7 +22,9 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({ request });
+          supabaseResponse = NextResponse.next({
+            request: { headers: requestHeaders },
+          });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           );
@@ -33,6 +38,23 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Hand the already-verified user down to Server Components and Server
+  // Actions via a trusted request header, so they don't have to make a
+  // second round trip to Supabase Auth just to re-check who's signed in.
+  // `.set` always overwrites, so a client can't spoof this by sending its
+  // own `x-user-id` header — only this verified value ever reaches them.
+  requestHeaders.set("x-user-id", user?.id ?? "");
+  requestHeaders.set("x-user-email", user?.email ?? "");
+  requestHeaders.set(
+    "x-user-name",
+    encodeURIComponent(user?.user_metadata?.full_name ?? "")
+  );
+  const cookiesToCarry = supabaseResponse.cookies.getAll();
+  supabaseResponse = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+  cookiesToCarry.forEach((cookie) => supabaseResponse.cookies.set(cookie));
 
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some((route) =>

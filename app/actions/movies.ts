@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { flattenError } from "zod";
 import { createClient } from "@/lib/supabase/server";
@@ -10,6 +11,17 @@ import {
   EditMovieFormSchema,
   EditMovieFormState,
 } from "@/lib/definitions";
+
+// The middleware already verified the session for this request and handed
+// the result down via headers, so actions don't need to call
+// supabase.auth.getUser() a second time just to get the user id.
+async function requireUserId() {
+  const userId = (await headers()).get("x-user-id");
+  if (!userId) {
+    redirect("/login");
+  }
+  return userId;
+}
 
 export async function addMovie(state: AddMovieFormState, formData: FormData) {
   const validatedFields = AddMovieFormSchema.safeParse({
@@ -36,14 +48,8 @@ export async function addMovie(state: AddMovieFormState, formData: FormData) {
       ? notesRaw.trim()
       : null;
 
+  const userId = await requireUserId();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
 
   const { title, status } = validatedFields.data;
 
@@ -51,7 +57,7 @@ export async function addMovie(state: AddMovieFormState, formData: FormData) {
     .schema("movie_tracker")
     .from("movies")
     .insert({
-      user_id: user.id,
+      user_id: userId,
       title,
       status,
       rating,
@@ -72,21 +78,15 @@ export async function deleteMovie(formData: FormData) {
     return;
   }
 
+  const userId = await requireUserId();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
 
   await supabase
     .schema("movie_tracker")
     .from("movies")
     .delete()
     .eq("id", id)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
 
   revalidatePath("/dashboard");
 }
@@ -121,14 +121,8 @@ export async function updateMovie(state: EditMovieFormState, formData: FormData)
       ? notesRaw.trim()
       : null;
 
+  const userId = await requireUserId();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
 
   const { status } = validatedFields.data;
 
@@ -137,7 +131,7 @@ export async function updateMovie(state: EditMovieFormState, formData: FormData)
     .from("movies")
     .update({ status, rating, notes })
     .eq("id", id)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
 
   if (error) {
     return { message: error.message };
