@@ -18,6 +18,15 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // A Server Action invocation is a POST to the current page carrying this
+  // header. If the session turns out to be invalid, the action itself (or
+  // the page) already redirects via `redirect()`, which produces a
+  // response the Server Action client runtime understands. A plain
+  // `NextResponse.redirect()` from middleware does not - it fails as
+  // "An unexpected response was received from the server" - so such
+  // requests must fall through instead of being redirected here.
+  const isServerAction = request.headers.has("next-action");
+
   const requestHeaders = new Headers(request.headers);
   let supabaseResponse = NextResponse.next({
     request: { headers: requestHeaders },
@@ -52,7 +61,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (isProtectedRoute && !user) {
+  if (isProtectedRoute && !user && !isServerAction) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
