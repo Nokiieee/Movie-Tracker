@@ -73,6 +73,13 @@ export async function login(state: LoginFormState, formData: FormData) {
 
 export async function logout() {
   const supabase = await createClient();
-  await supabase.auth.signOut();
+
+  try {
+    await supabase.auth.signOut();
+  } catch {
+    // The session may already be invalid (e.g. expired, or signed out
+    // elsewhere) - there's nothing left to clean up, so just proceed.
+  }
+
   redirect("/login");
 }
