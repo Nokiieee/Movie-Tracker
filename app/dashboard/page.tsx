@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/actions/auth";
-import { AddMovieForm } from "@/components/movies/add-movie-form";
+import { AddMovieLauncher } from "@/components/movies/add-movie-launcher";
 import { MovieList } from "@/components/movies/movie-list";
 import { Movie } from "@/lib/definitions";
 
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
       </header>
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-6">
-        <AddMovieForm />
+        <AddMovieLauncher />
 
         {error ? (
           <p className="text-sm text-red-700">
