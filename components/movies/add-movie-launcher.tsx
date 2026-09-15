@@ -26,7 +26,7 @@ export function AddMovieLauncher() {
         onClick={(e) => {
           if (e.target === dialogRef.current) close();
         }}
-        className="movie-modal m-auto max-h-[85vh] w-[min(92vw,32rem)] overflow-y-auto border-0 bg-transparent p-0"
+        className="movie-modal m-auto max-h-[85vh] w-[min(92vw,40rem)] overflow-y-auto border-0 bg-transparent p-0"
       >
         <div className="relative pt-3">
           <span
@@ -39,7 +39,7 @@ export function AddMovieLauncher() {
             type="button"
             onClick={close}
             aria-label="Close"
-            className="absolute right-3 top-4 z-10 rounded-md p-1.5 text-[var(--ink-soft)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--ink)]"
+            className="absolute right-2 top-3 z-10 rounded-md p-3 text-[var(--ink-soft)] transition-colors hover:bg-[var(--paper)] hover:text-[var(--ink)] sm:right-3 sm:top-4 sm:p-1.5"
           >
             <X size={18} strokeWidth={2} aria-hidden="true" />
           </button>

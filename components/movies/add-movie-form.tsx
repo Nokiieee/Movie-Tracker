@@ -32,7 +32,7 @@ export function AddMovieForm({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <form ref={formRef} action={action} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-[2fr_1fr_1fr]">
+      <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_10rem_8rem]">
         <div className="space-y-1">
           <label htmlFor="title" className={labelClass}>
             Title
@@ -110,7 +110,7 @@ export function AddMovieForm({ onSuccess }: { onSuccess?: () => void }) {
         <p className="text-sm text-red-600">{state.message}</p>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[var(--tape-border)] pt-4">
+      <div className="flex flex-col gap-3 border-t border-dashed border-[var(--tape-border)] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
         <div className="min-w-0">
           {title.trim() ? (
             <div className="flex items-center gap-2 truncate">
@@ -132,7 +132,7 @@ export function AddMovieForm({ onSuccess }: { onSuccess?: () => void }) {
         <button
           disabled={pending}
           type="submit"
-          className="shrink-0 rounded-md bg-[var(--ink)] px-4 py-2 text-sm font-medium text-[var(--paper-panel)] transition-transform duration-150 hover:-rotate-1 disabled:opacity-50"
+          className="w-full shrink-0 rounded-md bg-[var(--ink)] px-4 py-3 text-sm font-medium text-[var(--paper-panel)] transition-transform duration-150 hover:-rotate-1 disabled:opacity-50 sm:w-auto sm:py-2"
         >
           {pending ? "Stamping..." : "Add movie"}
         </button>
