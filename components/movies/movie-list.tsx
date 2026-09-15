@@ -242,7 +242,7 @@ export function MovieList({ movies }: { movies: Movie[] }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-2 rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-2">
+      <div className="flex items-center gap-2 rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-2 focus-within:border-[var(--ink)]">
         <svg
           viewBox="0 0 20 20"
           width="14"

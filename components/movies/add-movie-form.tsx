@@ -10,7 +10,7 @@ const fieldClass =
 
 const labelClass = "text-sm font-medium text-[var(--ink-soft)]";
 
-export function AddMovieForm() {
+export function AddMovieForm({ onSuccess }: { onSuccess?: () => void }) {
   const [state, action, pending] = useActionState(addMovie, undefined);
   const formRef = useRef<HTMLFormElement>(null);
   const wasPending = useRef(false);
@@ -25,126 +25,118 @@ export function AddMovieForm() {
       setTitle("");
       setStatus("want_to_watch");
       setRating("");
+      onSuccess?.();
     }
     wasPending.current = pending;
-  }, [pending, state]);
+  }, [pending, state, onSuccess]);
 
   return (
-    <div className="relative pt-3">
-      <span className="absolute left-4 top-0 -rotate-2 rounded-sm bg-[var(--lilac)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--lilac-ink)] shadow-[0_2px_4px_rgba(58,52,44,0.15)]">
-        New entry
-      </span>
-      <form
-        ref={formRef}
-        action={action}
-        className="rounded-lg border border-[var(--tape-border)] bg-[var(--paper-panel)] p-5 pt-7 shadow-[0_2px_10px_rgba(58,52,44,0.06)]"
-      >
-        <div className="grid gap-4 sm:grid-cols-[2fr_1fr_1fr]">
-          <div className="space-y-1">
-            <label htmlFor="title" className={labelClass}>
-              Title
-            </label>
-            <input
-              id="title"
-              name="title"
-              placeholder="e.g. The Matrix"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={fieldClass}
-            />
-            {state?.errors?.title && (
-              <p className="text-sm text-red-600">{state.errors.title[0]}</p>
-            )}
-          </div>
-
-          <div className="space-y-1">
-            <label htmlFor="status" className={labelClass}>
-              Status
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as MovieStatus)}
-              className={fieldClass}
-            >
-              {MOVIE_STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {MOVIE_STATUS_LABELS[s]}
-                </option>
-              ))}
-            </select>
-            {state?.errors?.status && (
-              <p className="text-sm text-red-600">{state.errors.status[0]}</p>
-            )}
-          </div>
-
-          <div className="space-y-1">
-            <label htmlFor="rating" className={labelClass}>
-              Rating
-            </label>
-            <select
-              id="rating"
-              name="rating"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-              className={fieldClass}
-            >
-              <option value="">No rating</option>
-              {[1, 2, 3, 4, 5].map((n) => (
-                <option key={n} value={n}>
-                  {n} star{n > 1 ? "s" : ""}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="mt-4 space-y-1">
-          <label htmlFor="notes" className={labelClass}>
-            Notes
+    <form ref={formRef} action={action} className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-[2fr_1fr_1fr]">
+        <div className="space-y-1">
+          <label htmlFor="title" className={labelClass}>
+            Title
           </label>
-          <textarea
-            id="notes"
-            name="notes"
-            rows={2}
-            placeholder="Optional notes..."
-            className={`${fieldClass} resize-none`}
+          <input
+            id="title"
+            name="title"
+            placeholder="e.g. The Matrix"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={fieldClass}
           />
+          {state?.errors?.title && (
+            <p className="text-sm text-red-600">{state.errors.title[0]}</p>
+          )}
         </div>
 
-        {state?.message && (
-          <p className="mt-3 text-sm text-red-600">{state.message}</p>
-        )}
-
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[var(--tape-border)] pt-4">
-          <div className="min-w-0">
-            {title.trim() ? (
-              <div className="flex items-center gap-2 truncate">
-                <span className="truncate text-sm font-medium text-[var(--ink)]">
-                  {title}
-                </span>
-                <StarRating rating={rating ? Number(rating) : null} />
-                <span className="text-sm text-[var(--ink-soft)]">
-                  · {MOVIE_STATUS_LABELS[status]}
-                </span>
-              </div>
-            ) : (
-              <p className="text-sm text-[var(--ink-soft)]">
-                Start typing a title to preview it.
-              </p>
-            )}
-          </div>
-
-          <button
-            disabled={pending}
-            type="submit"
-            className="shrink-0 rounded-md bg-[var(--ink)] px-4 py-2 text-sm font-medium text-[var(--paper-panel)] transition-transform duration-150 hover:-rotate-1 disabled:opacity-50"
+        <div className="space-y-1">
+          <label htmlFor="status" className={labelClass}>
+            Status
+          </label>
+          <select
+            id="status"
+            name="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as MovieStatus)}
+            className={fieldClass}
           >
-            {pending ? "Stamping..." : "Add movie"}
-          </button>
+            {MOVIE_STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {MOVIE_STATUS_LABELS[s]}
+              </option>
+            ))}
+          </select>
+          {state?.errors?.status && (
+            <p className="text-sm text-red-600">{state.errors.status[0]}</p>
+          )}
         </div>
-      </form>
-    </div>
+
+        <div className="space-y-1">
+          <label htmlFor="rating" className={labelClass}>
+            Rating
+          </label>
+          <select
+            id="rating"
+            name="rating"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            className={fieldClass}
+          >
+            <option value="">No rating</option>
+            {[1, 2, 3, 4, 5].map((n) => (
+              <option key={n} value={n}>
+                {n} star{n > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <label htmlFor="notes" className={labelClass}>
+          Notes
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows={2}
+          placeholder="Optional notes..."
+          className={`${fieldClass} resize-none`}
+        />
+      </div>
+
+      {state?.message && (
+        <p className="text-sm text-red-600">{state.message}</p>
+      )}
+
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[var(--tape-border)] pt-4">
+        <div className="min-w-0">
+          {title.trim() ? (
+            <div className="flex items-center gap-2 truncate">
+              <span className="truncate text-sm font-medium text-[var(--ink)]">
+                {title}
+              </span>
+              <StarRating rating={rating ? Number(rating) : null} />
+              <span className="text-sm text-[var(--ink-soft)]">
+                · {MOVIE_STATUS_LABELS[status]}
+              </span>
+            </div>
+          ) : (
+            <p className="text-sm text-[var(--ink-soft)]">
+              Start typing a title to preview it.
+            </p>
+          )}
+        </div>
+
+        <button
+          disabled={pending}
+          type="submit"
+          className="shrink-0 rounded-md bg-[var(--ink)] px-4 py-2 text-sm font-medium text-[var(--paper-panel)] transition-transform duration-150 hover:-rotate-1 disabled:opacity-50"
+        >
+          {pending ? "Stamping..." : "Add movie"}
+        </button>
+      </div>
+    </form>
   );
 }
