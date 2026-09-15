@@ -39,6 +39,14 @@ body {
   outline-color: var(--ink);
 }
 
+/* Fields show focus by shifting their border to --ink, so they opt out of the
+   global ring rather than stacking two indicators. Buttons and links keep it. */
+.diary input:focus-visible,
+.diary select:focus-visible,
+.diary textarea:focus-visible {
+  outline: none;
+}
+
 .diary ::selection {
   background: var(--rose);
   color: var(--rose-ink);
@@ -46,4 +54,50 @@ body {
 
 .diary * {
   scrollbar-color: var(--tape-border) var(--paper);
+}
+
+/* Add-movie modal: fades/settles in like a ticket being set down, and
+   reverses the same way on close via allow-discrete + @starting-style. */
+.movie-modal {
+  opacity: 0;
+  transform: scale(0.96) rotate(-0.5deg);
+  transition:
+    opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+
+.movie-modal[open] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+@starting-style {
+  .movie-modal[open] {
+    opacity: 0;
+    transform: scale(0.96) rotate(-0.5deg);
+  }
+}
+
+.movie-modal::backdrop {
+  background: rgba(58, 52, 44, 0);
+  backdrop-filter: blur(0px);
+  transition:
+    background 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    backdrop-filter 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+
+.movie-modal[open]::backdrop {
+  background: rgba(58, 52, 44, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+@starting-style {
+  .movie-modal[open]::backdrop {
+    background: rgba(58, 52, 44, 0);
+    backdrop-filter: blur(0px);
+  }
 }
