@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { logout } from "@/app/actions/auth";
+import { ProfileMenu } from "@/components/profile-menu";
 import { AddMovieLauncher } from "@/components/movies/add-movie-launcher";
 import { MovieList } from "@/components/movies/movie-list";
 import { Movie } from "@/lib/definitions";
@@ -25,27 +25,18 @@ export default async function DashboardPage() {
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
+  const email = requestHeaders.get("x-user-email") ?? "";
   const decodedName = decodeURIComponent(requestHeaders.get("x-user-name") ?? "");
-  const name = decodedName || requestHeaders.get("x-user-email") || "";
+  const name = decodedName || email;
 
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <header className="border-b border-[var(--tape-border)]">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-6 py-5">
-          <div>
-            <h1 className="font-[family-name:var(--font-hand)] text-3xl font-semibold leading-none text-[var(--ink)] -rotate-1">
-              Movie Tracker
-            </h1>
-            <p className="mt-1 text-sm italic text-[var(--ink-soft)]">{name}</p>
-          </div>
-          <form action={logout}>
-            <button
-              type="submit"
-              className="rounded-md border border-[var(--tape-border)] bg-[var(--paper-panel)] px-3 py-1.5 text-sm font-medium text-[var(--ink)] transition-colors hover:bg-[var(--paper)]"
-            >
-              Log out
-            </button>
-          </form>
+          <h1 className="shrink-0 -rotate-1 font-[family-name:var(--font-hand)] text-2xl font-semibold leading-none text-[var(--ink)] sm:text-3xl">
+            Movie Tracker
+          </h1>
+          <ProfileMenu name={name} email={email} />
         </div>
       </header>
 
