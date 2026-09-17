@@ -20,7 +20,9 @@ export default function SignupPage() {
           </span>
           <div className="rounded-lg border border-[var(--tape-border)] bg-[var(--paper-panel)] p-6 pt-8 shadow-[0_2px_10px_rgba(58,52,44,0.06)]">
             <div className="mb-5 space-y-1 text-center">
-              <h2 className="text-xl font-semibold text-[var(--ink)]">Create an account</h2>
+              <h2 className="text-xl font-semibold text-[var(--ink)]">
+                Create an account
+              </h2>
               <p className="text-sm text-[var(--ink-soft)]">
                 Track the movies you watch and want to watch.
               </p>
@@ -28,13 +30,16 @@ export default function SignupPage() {
 
             <form action={action} className="space-y-4">
               <div className="space-y-1">
-                <label htmlFor="name" className="text-sm font-medium text-[var(--ink-soft)]">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-[var(--ink-soft)]"
+                >
                   Name
                 </label>
                 <input
                   id="name"
                   name="name"
-                  placeholder="Enter you name"
+                  placeholder="Enter your name"
                   className="w-full rounded-md border border-[var(--tape-border)] bg-white px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-[var(--ink)]"
                 />
                 {state?.errors?.name && (
@@ -43,7 +48,10 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="email" className="text-sm font-medium text-[var(--ink-soft)]">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-[var(--ink-soft)]"
+                >
                   Email
                 </label>
                 <input
@@ -54,12 +62,17 @@ export default function SignupPage() {
                   className="w-full rounded-md border border-[var(--tape-border)] bg-white px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-[var(--ink)]"
                 />
                 {state?.errors?.email && (
-                  <p className="text-sm text-red-600">{state.errors.email[0]}</p>
+                  <p className="text-sm text-red-600">
+                    {state.errors.email[0]}
+                  </p>
                 )}
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="password" className="text-sm font-medium text-[var(--ink-soft)]">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-[var(--ink-soft)]"
+                >
                   Password
                 </label>
                 <input
