@@ -21,9 +21,9 @@ export default async function DashboardPage() {
   const { data: movies, error } = await supabase
     .schema("movie_tracker")
     .from("movies")
-    .select("id, title, status, rating, notes, created_at")
+    .select("id, title, status, rating, notes, created_at, updated_at")
     .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .order("updated_at", { ascending: false });
 
   const email = requestHeaders.get("x-user-email") ?? "";
   const decodedName = decodeURIComponent(requestHeaders.get("x-user-name") ?? "");
