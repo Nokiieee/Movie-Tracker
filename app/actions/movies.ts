@@ -129,7 +129,7 @@ export async function updateMovie(state: EditMovieFormState, formData: FormData)
   const { error } = await supabase
     .schema("movie_tracker")
     .from("movies")
-    .update({ status, rating, notes })
+    .update({ status, rating, notes, updated_at: new Date().toISOString() })
     .eq("id", id)
     .eq("user_id", userId);
 
