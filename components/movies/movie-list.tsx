@@ -145,7 +145,7 @@ function MovieRow({ movie, tint }: { movie: Movie; tint: string }) {
           <div className="flex shrink-0 items-center gap-3">
             <StarRating rating={movie.rating} />
             <span className="shrink-0 text-sm tabular-nums text-[var(--ink-soft)]">
-              {formatDate(movie.created_at)}
+              {formatDate(movie.updated_at)}
             </span>
           </div>
           <div className="flex shrink-0 items-center gap-2">
